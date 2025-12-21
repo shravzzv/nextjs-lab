@@ -1,15 +1,17 @@
-describe('Navigation', () => {
-  it('should navigate to the about page', () => {
-    // Start from the index page
+describe('Chat page', () => {
+  it('allows the user to type and submit a message', () => {
+    // Visit the page that renders <Chat />
     cy.visit('http://localhost:3000/')
 
-    // Find a link with an href attribute containing "about" and click it
-    cy.get('a[href*="about"]').click()
+    // Find the input
+    cy.get('input[placeholder="Say something..."]')
+      .should('exist')
+      .type('Hello AI')
 
-    // The new url should include "/about"
-    cy.url().should('include', '/about')
+    // Submit the form (press Enter)
+    cy.get('input[placeholder="Say something..."]').type('{enter}')
 
-    // The new page should contain an h1 with "About"
-    cy.get('h1').contains('About')
+    // Input should be cleared after submit
+    cy.get('input[placeholder="Say something..."]').should('have.value', '')
   })
 })
