@@ -1,11 +1,21 @@
 import { test, expect } from '@playwright/test'
 
-test('should navigate to the about page', async ({ page }) => {
+test('allows the user to type and submit a chat message', async ({ page }) => {
+  // Go to the page that renders <Chat />
   await page.goto('/')
 
-  await page.getByRole('link', { name: /about/i }).click()
+  // Locate the input by placeholder
+  const input = page.getByPlaceholder('Say something...')
 
-  await expect(page).toHaveURL(/\/about$/)
+  // Ensure input is visible
+  await expect(input).toBeVisible()
 
-  await expect(page.getByRole('heading', { name: 'About' })).toBeVisible()
+  // Type a message
+  await input.fill('Hello AI')
+
+  // Submit by pressing Enter
+  await input.press('Enter')
+
+  // Input should be cleared after submit
+  await expect(input).toHaveValue('')
 })
